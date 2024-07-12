@@ -5,12 +5,23 @@
 #include <iostream>
 #include <fstream>
 
+bool hit_sphere(const point3& center, double radius, const ray& r) {
+    vec3 oc = center - r.origin();
+    auto a = dot(r.direction(), r.direction());
+    auto b = -2.0 * dot(r.direction(), oc);
+    auto c = dot(oc, oc) - radius*radius;
+    auto discriminant = b*b - 4*a*c;
+    return (discriminant >= 0);
+}
+
 color ray_color(const ray& r) {
+    if (hit_sphere(point3(0,0,-1), 0.5, r))
+        return color(1, 0, 0);
+
     vec3 unit_direction = unit_vector(r.direction());
     auto a = 0.5*(unit_direction.y() + 1.0);
     return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0);
 }
-
 
 void write_color(std::ofstream& os, const color& pixel_color) {
     os << static_cast<int>(pixel_color.e[0] * 255) << " " <<
@@ -26,7 +37,7 @@ int main() {
     int image_width = 400;
 
     // Create a file stream to output the image data
-    std::ofstream file("image3.ppm");
+    std::ofstream file("image4.ppm");
 
     // Calculate the image height, and ensure that it's at least 1.
     int image_height = int(image_width / aspect_ratio);
