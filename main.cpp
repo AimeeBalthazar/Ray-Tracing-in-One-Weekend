@@ -11,7 +11,7 @@ by Peter Shirley
 
 color ray_color(const ray& r, const hittable& world) {
     hit_record rec;
-    if (world.hit(r, 0, infinity, rec)) {
+    if (world.hit(r, interval(0, infinity), rec)) {
         return 0.5 * (rec.normal + color(1,1,1));
     }
 
@@ -34,7 +34,7 @@ int main() {
     int image_width = 400;
 
     // Create a file stream to output the image data
-    std::ofstream file("image6.ppm");
+    std::ofstream file("image7.ppm");
 
     // Calculate the image height, and ensure that it's at least 1.
     int image_height = int(image_width / aspect_ratio);
